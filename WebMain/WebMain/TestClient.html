@@ -6,32 +6,38 @@
     <link rel="stylesheet" href="TestClient.css">
 </head>
 <body>
-    <div>
-        <label for="w">W:</label>
-        <input id="w" type="number" step="1" onchange="this.value = parseInt(this.value);" />
-        <span>px;</span>
-        <label for="h" style="margin-left: 8px">H:</label>
-        <input id="h" type="number" step="1" onchange="this.value = parseInt(this.value);" />
-        <span>px;</span>
-    </div>
-    <div class="lines">
+    <fieldset>
+        <legend>Settings</legend>
         <div>
-            <p class="pb">Line 1:</p>
-            <p>Point 1=(<input id="X11" type="number" step="0.001" />, <input id="Y11" type="number" step="0.001" />)</p>
-            <p>Point 2=(<input id="X12" type="number" step="0.001" />, <input id="Y12" type="number" step="0.001" />)</p>
+            <label for="w">W:</label>
+            <input id="w" type="number" step="1" onchange="this.value = parseInt(this.value);" />
+            <span>px;</span>&nbsp;&nbsp;
+            <label for="h">H:</label>
+            <input id="h" type="number" step="1" onchange="this.value = parseInt(this.value);" />
+            <span>px;</span>&nbsp;&nbsp;
+            <input type="checkbox" id="svg_check" name="svg_check" checked />
+            <label for="svg_check">SVG</label>
         </div>
-        <div>
-            <p class="pb">Line 2:</p>
-            <p>Point 1=(<input id="X21" type="number" step="0.001" />, <input id="Y21" type="number" step="0.001" />)</p>
-            <p>Point 2=(<input id="X22" type="number" step="0.001" />, <input id="Y22" type="number" step="0.001" />)</p>
+        <div class="lines">
+            <div>
+                <p class="pb">Line 1:</p>
+                <p>Point 1=(<input id="X11" type="number" step="0.001" />, <input id="Y11" type="number" step="0.001" />)</p>
+                <p>Point 2=(<input id="X12" type="number" step="0.001" />, <input id="Y12" type="number" step="0.001" />)</p>
+            </div>
+            <div>
+                <p class="pb">Line 2:</p>
+                <p>Point 1=(<input id="X21" type="number" step="0.001" />, <input id="Y21" type="number" step="0.001" />)</p>
+                <p>Point 2=(<input id="X22" type="number" step="0.001" />, <input id="Y22" type="number" step="0.001" />)</p>
+            </div>
         </div>
-    </div>
+    </fieldset>
 
     <input type="button" class="btn" value="Invoke" id="btn_1" />
 
     <p id="interpoint" style="display: none">Intersection point=(<span id="A"></span>, <span id="B"></span>)</p>
     <br />
     <img alt="#" src="#" id="im" onerror="this.style.display='none'" />
+    <div id="svg-space"></div>
 
     <script type="text/javascript" src="lib/jquery/dist/jquery.js"></script>
     <script type="text/javascript">
@@ -46,7 +52,7 @@
         X22.value = 53.0;
         Y22.value = 12.2;
 
-        const send_soap = function (w, h, data) {
+        const send_soap = function (w, h, data, svg = false) {
             let text_xml = '<?xml version=\"1.0\" encoding=\"utf-8\"?>' +
                 '<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">' +
                 '<soap12:Body>' + '<GetData xmlns=\"map\">' + '<client_data>' + '<Data>' + '<Lines>'
@@ -56,19 +62,24 @@
                     '<B>' + '<X>' + data[i].B.X + '</X>' + '<Y>' + data[i].B.Y + '</Y>' + '</B>' +
                     '</Line>';
             }
-            text_xml += '</Lines>' + '</Data>' + '<W>' + w + '</W>' + '<H>' + h + '</H>'
+            text_xml += '</Lines>' + '</Data>' + `<W>${w}</W>` + `<H>${h}</H>` + `<SVG>${svg}</SVG>`
             text_xml += '</client_data>' + '</GetData>' + '</soap12:Body>' + '</soap12:Envelope>'
             return text_xml;
         }
 
-        const success = function (data) {
+        function getResult(data) {
             var xroot = $(data).children().eq(0);
             var xbody = xroot.children().eq(0);
             var xresponse = xbody.children().eq(0);
-            var xresult = xresponse.children().eq(0).children();
-            im.src = 'data:image/jpeg;base64,' + xresult.eq(2).text();
+            return xresponse.children().eq(0).children();
+        }
+
+        const success = function (data) {
+            var xresult = getResult(data);
             A.textContent = xresult.eq(0).text();
-            B.textContent = xresult.eq(1).text();           
+            B.textContent = xresult.eq(1).text();
+            im.src = 'data:image/jpeg;base64,' + xresult.eq(2).text();
+            document.getElementById('svg-space').style.display = 'none';
             document.getElementById("im").style.display = 'block';
             document.getElementById("interpoint").style.display = 'block';
             var errorMsg = xresult.eq(3).text();
@@ -77,23 +88,42 @@
             }
         }
 
+        const successSVG = function (data) {
+            var xresult = getResult(data);
+            A.textContent = xresult.eq(0).text();
+            B.textContent = xresult.eq(1).text();
+            document.getElementById('svg-space').innerHTML = xresult.eq(4).html();
+            document.getElementById('svg-space').style.display = 'block';
+            document.getElementById("im").style.display = 'none';
+            document.getElementById("interpoint").style.display = 'block';
+            var errorMsg = xresult.eq(3).text();
+            if (errorMsg !== '') {
+                window.alert(errorMsg);
+            }
+        }
+
         const button = document.getElementById("btn_1").onclick = function () {
-            if (w.value <= 20 || w.value > 400 || h.value <= 20 || h.value > 400) {
-                window.alert("at least 20px and at most 400px for 'W' and 'H'");
-                w.value = Math.max(20, Math.min(400, w.value));
-                h.value = Math.max(20, Math.min(400, h.value));
+            if (w.value < 20 || h.value < 20) {
+                window.alert("at least 20px for 'W' and 'H'");
+                w.value = Math.max(20, w.value);
+                h.value = Math.max(20, h.value);
                 return;
             }
-            let test_data = send_soap(w.value, h.value, [
-                { A: { X: X11.value, Y: Y11.value }, B: { X: X12.value, Y: Y12.value } },
-                { A: { X: X21.value, Y: Y21.value }, B: { X: X22.value, Y: Y22.value } },
-            ]);
+            if (!svg_check.checked && (w.value > 400 || h.value > 400)) {
+                window.alert("at most 400px for 'W' and 'H' in non-svg mode");
+                w.value = Math.min(400, w.value);
+                h.value = Math.min(400, h.value);
+                return;
+            }
             $.ajax({
                 url: 'http://localhost:52511/WebMap.asmx',
                 contentType: 'application/soap+xml; charset=utf-8',
-                data: test_data,
+                data: send_soap(w.value, h.value, [
+                    { A: { X: X11.value, Y: Y11.value }, B: { X: X12.value, Y: Y12.value } },
+                    { A: { X: X21.value, Y: Y21.value }, B: { X: X22.value, Y: Y22.value } },
+                ], svg_check.checked),
                 type: "POST",
-                success: success
+                success: svg_check.checked? successSVG: success
             });
         }
     </script>

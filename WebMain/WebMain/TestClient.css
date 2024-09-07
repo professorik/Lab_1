@@ -1,10 +1,11 @@
-﻿input {
+﻿input[type=number] {
     width: 64px;
 }
 
-.btn {
+input[type="button"] {
     width: 128px;
     height: 24px;
+    margin: 2px;
 }
 
 .pb {
@@ -14,4 +15,8 @@
 .lines {
     display: flex;
     gap: 48px;
+}
+
+fieldset {
+    width: fit-content;
 }

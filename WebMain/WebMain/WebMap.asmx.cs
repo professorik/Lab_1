@@ -1,4 +1,5 @@
 ﻿using System.Web.Services;
+using System.Xml;
 using WebMain.Models;
 
 namespace WebMain
@@ -38,7 +39,17 @@ namespace WebMain
 
             ResponseData result = new ResponseData();
             result.Error = interpoint.Error;
-            result.Image = graphics_client.GetImage(gdata);
+            if (client_data.SVG)
+            {
+                var doc = new XmlDocument();
+                doc.Load(graphics_client.GetSVGImage(gdata).CreateReader());
+                result.SvgImage = doc.DocumentElement;
+                result.Image = "";
+            }
+            else
+            {
+                result.Image = graphics_client.GetImage(gdata);
+            }
             result.A = interpoint.Inter.X;
             result.B = interpoint.Inter.Y;
             return result;

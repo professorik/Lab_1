@@ -311,6 +311,13 @@ namespace WebMain.ServiceGraphics {
         
         [System.ServiceModel.OperationContractAttribute(Action="webgraphics/GetImage", ReplyAction="*")]
         System.Threading.Tasks.Task<WebMain.ServiceGraphics.GetImageResponse> GetImageAsync(WebMain.ServiceGraphics.GetImageRequest request);
+        
+        // CODEGEN: Generating message contract since element name gdata from namespace webgraphics is not marked nillable
+        [System.ServiceModel.OperationContractAttribute(Action="webgraphics/GetSVGImage", ReplyAction="*")]
+        WebMain.ServiceGraphics.GetSVGImageResponse GetSVGImage(WebMain.ServiceGraphics.GetSVGImageRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="webgraphics/GetSVGImage", ReplyAction="*")]
+        System.Threading.Tasks.Task<WebMain.ServiceGraphics.GetSVGImageResponse> GetSVGImageAsync(WebMain.ServiceGraphics.GetSVGImageRequest request);
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -381,6 +388,74 @@ namespace WebMain.ServiceGraphics {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class GetSVGImageRequest {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="GetSVGImage", Namespace="webgraphics", Order=0)]
+        public WebMain.ServiceGraphics.GetSVGImageRequestBody Body;
+        
+        public GetSVGImageRequest() {
+        }
+        
+        public GetSVGImageRequest(WebMain.ServiceGraphics.GetSVGImageRequestBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="webgraphics")]
+    public partial class GetSVGImageRequestBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public WebMain.ServiceGraphics.GraphicsData gdata;
+        
+        public GetSVGImageRequestBody() {
+        }
+        
+        public GetSVGImageRequestBody(WebMain.ServiceGraphics.GraphicsData gdata) {
+            this.gdata = gdata;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class GetSVGImageResponse {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="GetSVGImageResponse", Namespace="webgraphics", Order=0)]
+        public WebMain.ServiceGraphics.GetSVGImageResponseBody Body;
+        
+        public GetSVGImageResponse() {
+        }
+        
+        public GetSVGImageResponse(WebMain.ServiceGraphics.GetSVGImageResponseBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="webgraphics")]
+    public partial class GetSVGImageResponseBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public System.Xml.Linq.XElement GetSVGImageResult;
+        
+        public GetSVGImageResponseBody() {
+        }
+        
+        public GetSVGImageResponseBody(System.Xml.Linq.XElement GetSVGImageResult) {
+            this.GetSVGImageResult = GetSVGImageResult;
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface WebGRSoapChannel : WebMain.ServiceGraphics.WebGRSoap, System.ServiceModel.IClientChannel {
     }
@@ -431,6 +506,31 @@ namespace WebMain.ServiceGraphics {
             inValue.Body = new WebMain.ServiceGraphics.GetImageRequestBody();
             inValue.Body.gdata = gdata;
             return ((WebMain.ServiceGraphics.WebGRSoap)(this)).GetImageAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        WebMain.ServiceGraphics.GetSVGImageResponse WebMain.ServiceGraphics.WebGRSoap.GetSVGImage(WebMain.ServiceGraphics.GetSVGImageRequest request) {
+            return base.Channel.GetSVGImage(request);
+        }
+        
+        public System.Xml.Linq.XElement GetSVGImage(WebMain.ServiceGraphics.GraphicsData gdata) {
+            WebMain.ServiceGraphics.GetSVGImageRequest inValue = new WebMain.ServiceGraphics.GetSVGImageRequest();
+            inValue.Body = new WebMain.ServiceGraphics.GetSVGImageRequestBody();
+            inValue.Body.gdata = gdata;
+            WebMain.ServiceGraphics.GetSVGImageResponse retVal = ((WebMain.ServiceGraphics.WebGRSoap)(this)).GetSVGImage(inValue);
+            return retVal.Body.GetSVGImageResult;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<WebMain.ServiceGraphics.GetSVGImageResponse> WebMain.ServiceGraphics.WebGRSoap.GetSVGImageAsync(WebMain.ServiceGraphics.GetSVGImageRequest request) {
+            return base.Channel.GetSVGImageAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<WebMain.ServiceGraphics.GetSVGImageResponse> GetSVGImageAsync(WebMain.ServiceGraphics.GraphicsData gdata) {
+            WebMain.ServiceGraphics.GetSVGImageRequest inValue = new WebMain.ServiceGraphics.GetSVGImageRequest();
+            inValue.Body = new WebMain.ServiceGraphics.GetSVGImageRequestBody();
+            inValue.Body.gdata = gdata;
+            return ((WebMain.ServiceGraphics.WebGRSoap)(this)).GetSVGImageAsync(inValue);
         }
     }
 }

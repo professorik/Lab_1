@@ -126,7 +126,11 @@
     <Content Include="lib\jquery\dist\jquery.min.map" />
     <Content Include="lib\jquery\dist\jquery.slim.min.map" />
     <None Include="Connected Services\ServiceGeometry\WebGeometryService.wsdl" />
+    <Content Include="Connected Services\ServiceGraphics\WebMain.ServiceGraphics.GetSVGImageResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
     <None Include="packages.config" />
+    <Content Include="Properties\DataSources\System.Xml.Linq.XElement.datasource" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
