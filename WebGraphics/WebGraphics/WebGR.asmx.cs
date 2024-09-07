@@ -1,4 +1,5 @@
 ﻿using System.Web.Services;
+using System.Xml;
 using WebGraphics.Models;
 
 namespace WebGraphics
@@ -19,6 +20,12 @@ namespace WebGraphics
         {
             CreateImage res = new CreateImage(new CreatePicture(gdata).MakeGraph());
             return res.ImageString;
+        }
+
+        [WebMethod]
+        public XmlElement GetSVGImage(GraphicsData gdata)
+        {
+            return new CreatePicture(gdata).MakeSVG();
         }
     }
 }

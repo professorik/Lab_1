@@ -6,57 +6,64 @@
 </head>
 <body>
     <img alt="#" src="#" id="im" /><br />
+    <div id="svg-space"></div>
     <input type="button" value="Invoke" id="btn_1" />
+    <input type="button" value="Invoke SVG" id="btn_2" />
 
     <script type="text/javascript" src="lib/jquery/dist/jquery.js"></script>
     <script type="text/javascript">
-        const send_soap = function (w, h, x, y, data) {
+        const send_soap = function (w, h, x, y, data, method = 'GetSVGImage') {
             let text_xml = '<?xml version=\"1.0\" encoding=\"utf-8\"?>' +
                 '<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">' +
-                '<soap12:Body>' + '<GetImage xmlns=\"webgraphics\">' + '<gdata>' + '<Lines>'
+                '<soap12:Body>' + `<${method} xmlns=\"webgraphics\">` + '<gdata>' + '<Lines>'
             for (i = 0; i < 2; ++i) {
-                text_xml += '<Line>' +
-                    '<A>' + '<X>' + data[i].A.X + '</X>' + '<Y>' + data[i].A.Y + '</Y>' + '</A>' +
-                    '<B>' + '<X>' + data[i].B.X + '</X>' + '<Y>' + data[i].B.Y + '</Y>' + '</B>' +
-                    '</Line>';
+                text_xml += `<Line><A><X>${data[i].A.X}</X><Y>${data[i].A.Y}</Y></A><B><X>${data[i].B.X}</X><Y>${data[i].B.Y}</Y></B></Line>`;
             }
-            text_xml += '</Lines>' + '<InterPoint>' + '<X>' + x + '</X>' + '<Y>' + y + '</Y>' + '</InterPoint>'
-            text_xml += '<Width>' + w + '</Width>' + '<Height>' + h + '</Height>' +
-                        '</gdata>' + '</GetImage>' + '</soap12:Body>' + '</soap12:Envelope>'
+            text_xml += '</Lines>' + `<InterPoint><X>${x}</X><Y>${y}</Y></InterPoint>`
+            text_xml += `<Width>${w}</Width><Height>${h}</Height>` + '</gdata>' + `</${method}>` + '</soap12:Body></soap12:Envelope>'
             return text_xml;
         }
 
-        const success = function (data) {
+        function getResult(data) {
             var xroot = $(data).children().eq(0);
             var xbody = xroot.children().eq(0);
             var xresponse = xbody.children().eq(0);
-            var xresult = xresponse.children().eq(0);
+            return xresponse.children().eq(0);
+        }
+
+        const success = function (data) {
+            var xresult = getResult(data);
             im.src = 'data:image/jpeg;base64,' + xresult.eq(0).text();
         }
 
+        const successSVG = function (data) {
+            var xresult = getResult(data);
+            document.getElementById('svg-space').innerHTML = xresult.html();
+        }
+
         const button = document.getElementById("btn_1").onclick = function () {
-            /*let test_data = send_soap(200.0, 200.0, 33.2, 42.09, [
-                { A: { X: -3.3, Y: -4.2 }, B: { X: 98.0, Y: 54.2 } },
-                { A: { X: -43.3, Y: 24.2 }, B: { X: 53.0, Y: 12.2 } },
-            ]);*/
-            /*let test_data = send_soap(200.0, 200.0, -39.2, 89.09, [
-                { A: { X: 53.3, Y: -4.2 }, B: { X: 98.0, Y: 54.2 } },
-                { A: { X: -43.3, Y: 24.2 }, B: { X: -43.3, Y: 12.2 } },
-            ]);*/
-            /*let test_data = send_soap(200.0, 200.0, 33.2, 42.09, [
-                { A: { X: 56.3, Y: -46.2 }, B: { X: 56.3, Y: -54.2 } },
-                { A: { X: -43.3, Y: 24.2 }, B: { X: 53.0, Y: 12.2 } },
-            ]);*/
-            let test_data = send_soap(200.0, 200.0, 56.3, 24.2, [
-                { A: { X: 56.3, Y: -46.2 }, B: { X: 56.3, Y: -54.2 } },
-                { A: { X: -43.3, Y: 24.2 }, B: { X: 53.0, Y: 24.2 } },
-            ]);
             $.ajax({
                 url: 'http://localhost:51920/WebGR.asmx',
                 contentType: 'application/soap+xml; charset=utf-8',
-                data: test_data,
+                data: send_soap(200.0, 200.0, 56.3, 24.2, [
+                    { A: { X: 56.3, Y: -46.2 }, B: { X: 56.3, Y: -54.2 } },
+                    { A: { X: -43.3, Y: 24.2 }, B: { X: 53.0, Y: 24.2 } },
+                ], "GetImage"),
                 type: "POST",
                 success: success
+            });
+        }
+
+        const button_svg = document.getElementById("btn_2").onclick = function () {
+            $.ajax({
+                url: 'http://localhost:51920/WebGR.asmx',
+                contentType: 'application/soap+xml; charset=utf-8',
+                data: send_soap(200.0, 200.0, 56.3, 24.2, [
+                    { A: { X: 56.3, Y: -46.2 }, B: { X: 56.3, Y: -54.2 } },
+                    { A: { X: -43.3, Y: 24.2 }, B: { X: 53.0, Y: 24.2 } },
+                ]),
+                type: "POST",
+                success: successSVG
             });
         }
     </script>
