@@ -1,0 +1,17 @@
+﻿input {
+    width: 64px;
+}
+
+.btn {
+    width: 128px;
+    height: 24px;
+}
+
+.pb {
+    font-weight: bold;
+}
+
+.lines {
+    display: flex;
+    gap: 48px;
+}

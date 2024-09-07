@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<discovery xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.xmlsoap.org/disco/">
+  <contractRef ref="http://localhost:61083/WebGeometryService.asmx?wsdl" docRef="http://localhost:61083/WebGeometryService.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
+  <soap address="http://localhost:61083/WebGeometryService.asmx" xmlns:q1="webgeom" binding="q1:WebGeometryServiceSoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+  <soap address="http://localhost:61083/WebGeometryService.asmx" xmlns:q2="webgeom" binding="q2:WebGeometryServiceSoap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+</discovery>

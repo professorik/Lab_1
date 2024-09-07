@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="webgraphics" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="webgraphics" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="webgraphics">
+      <s:element name="GetImage">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="gdata" type="tns:GraphicsData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="GraphicsData">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Lines" type="tns:ArrayOfLine" />
+          <s:element minOccurs="0" maxOccurs="1" name="InterPoint" type="tns:Point" />
+          <s:element minOccurs="1" maxOccurs="1" name="Width" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Height" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfLine">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Line" nillable="true" type="tns:Line" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Line">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ExtensionData" type="tns:ExtensionDataObject" />
+          <s:element minOccurs="0" maxOccurs="1" name="A" type="tns:Point" />
+          <s:element minOccurs="0" maxOccurs="1" name="B" type="tns:Point" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ExtensionDataObject" />
+      <s:complexType name="Point">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ExtensionData" type="tns:ExtensionDataObject" />
+          <s:element minOccurs="1" maxOccurs="1" name="X" type="s:float" />
+          <s:element minOccurs="1" maxOccurs="1" name="Y" type="s:float" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetImageResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetImageResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetImageSoapIn">
+    <wsdl:part name="parameters" element="tns:GetImage" />
+  </wsdl:message>
+  <wsdl:message name="GetImageSoapOut">
+    <wsdl:part name="parameters" element="tns:GetImageResponse" />
+  </wsdl:message>
+  <wsdl:portType name="WebGRSoap">
+    <wsdl:operation name="GetImage">
+      <wsdl:input message="tns:GetImageSoapIn" />
+      <wsdl:output message="tns:GetImageSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WebGRSoap" type="tns:WebGRSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetImage">
+      <soap:operation soapAction="webgraphics/GetImage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WebGRSoap12" type="tns:WebGRSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetImage">
+      <soap12:operation soapAction="webgraphics/GetImage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WebGR">
+    <wsdl:port name="WebGRSoap" binding="tns:WebGRSoap">
+      <soap:address location="http://localhost:51920/WebGR.asmx" />
+    </wsdl:port>
+    <wsdl:port name="WebGRSoap12" binding="tns:WebGRSoap12">
+      <soap12:address location="http://localhost:51920/WebGR.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
