@@ -68,9 +68,13 @@
             var xresult = xresponse.children().eq(0).children();
             im.src = 'data:image/jpeg;base64,' + xresult.eq(2).text();
             A.textContent = xresult.eq(0).text();
-            B.textContent = xresult.eq(1).text();
+            B.textContent = xresult.eq(1).text();           
             document.getElementById("im").style.display = 'block';
             document.getElementById("interpoint").style.display = 'block';
+            var errorMsg = xresult.eq(3).text();
+            if (errorMsg !== '') {
+                window.alert(errorMsg);
+            }
         }
 
         const button = document.getElementById("btn_1").onclick = function () {

@@ -19,7 +19,11 @@ namespace WebGeometry.Models
             float denominator = ax * by - ay * bx;
             if (Math.Abs(denominator) < 1e-5)
             {
-                throw new Exception("the two lines are parallel or coincident");
+                if (Math.Abs(line_1.A.X * line_1.B.Y - line_1.B.X * line_1.A.Y + line_2.A.X * ay - line_2.A.Y * ax) < 1e-5)
+                {
+                    throw new Exception("the two lines are coincident");
+                }
+                throw new Exception("the two lines are parallel");
             }
             float tmp_1 = (line_1.A.X * line_1.B.Y - line_1.A.Y * line_1.B.X);
             float tmp_2 = (line_2.A.X * line_2.B.Y - line_2.A.Y * line_2.B.X);

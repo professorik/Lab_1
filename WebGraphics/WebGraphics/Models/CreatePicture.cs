@@ -32,7 +32,7 @@ namespace WebGraphics.Models
             _ymax = _xmax;
             _xmin = -_xmax;
             _ymin = -_ymax;
-            _factor = _xmax / 50f;
+            _factor = _xmax / 20f;
         }
 
         public Bitmap MakeGraph()
@@ -53,33 +53,39 @@ namespace WebGraphics.Models
                 
                 DrawAxes(g);
                 _expdata.Lines.ForEach(l => DrawLine(g, l));
-                g.DrawEllipse(new Pen(Color.Blue, 2), _expdata.InterPoint.X - _factor / 2, _expdata.InterPoint.Y - _factor /2 , _factor, _factor);
+                if (string.IsNullOrEmpty(_expdata.Error))
+                {
+                    g.FillEllipse(new SolidBrush(Color.Blue), _expdata.InterPoint.X - _factor / 2, _expdata.InterPoint.Y - _factor / 2, _factor, _factor);
+                }
+                else if (_expdata.Error.EndsWith("coincident"))
+                {
+                    (PointF first, PointF second) = GetEdges(_expdata.Lines[0]);
+                    g.DrawLine(new Pen(Color.Blue, 0), first, second);
+                }
                 return bm;
             }
         }
 
         private void DrawLine(Graphics g, Line l)
         {
-            PointF first, second;
-            if (Math.Abs(l.B.X - l.A.X) < 1e-5)
-            {
-                first = new PointF(l.A.X, _ymin);
-                second = new PointF(l.B.X, _ymax);
-            } else if (Math.Abs(l.B.Y - l.A.Y) < 1e-5)
-            {
-                first = new PointF(_xmin, l.A.Y);
-                second = new PointF(_xmax, l.B.Y);
-            } else
-            {
-                float a = (l.B.Y - l.A.Y) / (l.B.X - l.A.X);
-                float tmp = l.B.Y + a * (_xmax - l.B.X);
-                first = Math.Abs(tmp) <= _ymax? new PointF(_xmax, tmp): new PointF(l.B.X + (_ymax - l.B.Y) / a, _ymax);
-                tmp = l.A.Y + a * (_xmin - l.A.X);
-                second = Math.Abs(tmp) <= _ymax? new PointF(_xmin, tmp): new PointF(l.A.X + (_ymin - l.A.Y) / a, _ymin);
-            }
+            (PointF first, PointF second) = GetEdges(l);
             g.DrawLine(new Pen(Color.Black, 0), first, second);
-            g.DrawEllipse(new Pen(Color.Green, 2), l.A.X - _factor / 2, l.A.Y - _factor / 2, _factor, _factor);
-            g.DrawEllipse(new Pen(Color.Red, 2), l.B.X - _factor / 2, l.B.Y - _factor / 2, _factor, _factor);
+            g.FillEllipse(new SolidBrush(Color.Green), l.A.X - _factor / 2, l.A.Y - _factor / 2, _factor, _factor);
+            g.FillEllipse(new SolidBrush(Color.Red), l.B.X - _factor / 2, l.B.Y - _factor / 2, _factor, _factor);
+        }
+
+        private (PointF first, PointF second) GetEdges(Line l)
+        {
+            if (Math.Abs(l.B.X - l.A.X) < 1e-5)
+                return (new PointF(l.A.X, _ymin), new PointF(l.B.X, _ymax));
+            if (Math.Abs(l.B.Y - l.A.Y) < 1e-5)
+                return (new PointF(_xmin, l.A.Y), new PointF(_xmax, l.B.Y));
+            float a = (l.B.Y - l.A.Y) / (l.B.X - l.A.X);
+            float tmp = l.B.Y + a * (_xmax - l.B.X);
+            PointF first = Math.Abs(tmp) <= _ymax ? new PointF(_xmax, tmp) : new PointF(l.B.X + (_ymax - l.B.Y) / a, _ymax);
+            tmp = l.A.Y + a * (_xmin - l.A.X);
+            PointF second = Math.Abs(tmp) <= _ymax ? new PointF(_xmin, tmp) : new PointF(l.A.X + (_ymin - l.A.Y) / a, _ymin);
+            return (first, second);
         }
 
         private void DrawAxes(Graphics g)

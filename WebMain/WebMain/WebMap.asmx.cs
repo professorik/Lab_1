@@ -30,12 +30,14 @@ namespace WebMain
                 gdata.Lines[i].A = MapPoint(sdata.Lines[i].A);
                 gdata.Lines[i].B = MapPoint(sdata.Lines[i].B);
             }
+            gdata.Error = interpoint.Error;
             gdata.InterPoint = MapPoint(interpoint.Inter);
             gdata.Width = client_data.W;
             gdata.Height = client_data.H;
             ServiceGraphics.WebGRSoapClient graphics_client = new ServiceGraphics.WebGRSoapClient();
 
             ResponseData result = new ResponseData();
+            result.Error = interpoint.Error;
             result.Image = graphics_client.GetImage(gdata);
             result.A = interpoint.Inter.X;
             result.B = interpoint.Inter.Y;

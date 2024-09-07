@@ -6,5 +6,7 @@
         public float B { get; set; }
 
         public string Image { get; set; }
+
+        public string Error {  get; set; }
     }
 }

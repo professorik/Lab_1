@@ -12,6 +12,7 @@ namespace WebGraphics.Models
 
         public List<WebGeometry.Line> Lines { get; set; }
         public WebGeometry.Point InterPoint { get; set; }
+        public string Error { get; set; }
 
         public int Width { get; set; }
         public int Height { get; set; }

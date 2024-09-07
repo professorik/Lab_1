@@ -28,6 +28,9 @@ namespace WebMain.ServiceGraphics {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private WebMain.ServiceGraphics.Point InterPointField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ErrorField;
+        
         private int WidthField;
         
         private int HeightField;
@@ -68,7 +71,20 @@ namespace WebMain.ServiceGraphics {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=2)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
+        public string Error {
+            get {
+                return this.ErrorField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ErrorField, value) != true)) {
+                    this.ErrorField = value;
+                    this.RaisePropertyChanged("Error");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=3)]
         public int Width {
             get {
                 return this.WidthField;
@@ -81,7 +97,7 @@ namespace WebMain.ServiceGraphics {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=3)]
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=4)]
         public int Height {
             get {
                 return this.HeightField;

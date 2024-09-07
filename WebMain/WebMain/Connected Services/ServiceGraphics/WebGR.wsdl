@@ -13,6 +13,7 @@
         <s:sequence>
           <s:element minOccurs="0" maxOccurs="1" name="Lines" type="tns:ArrayOfLine" />
           <s:element minOccurs="0" maxOccurs="1" name="InterPoint" type="tns:Point" />
+          <s:element minOccurs="0" maxOccurs="1" name="Error" type="s:string" />
           <s:element minOccurs="1" maxOccurs="1" name="Width" type="s:int" />
           <s:element minOccurs="1" maxOccurs="1" name="Height" type="s:int" />
         </s:sequence>
