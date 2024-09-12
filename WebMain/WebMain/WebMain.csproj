@@ -80,8 +80,6 @@
     <Content Include="lib\jquery\dist\jquery.min.js" />
     <Content Include="lib\jquery\dist\jquery.slim.js" />
     <Content Include="lib\jquery\dist\jquery.slim.min.js" />
-    <Content Include="TestClient.css" />
-    <Content Include="TestClient.html" />
     <Content Include="WebMap.asmx" />
     <Content Include="Connected Services\ServiceGeometry\WebMain.ServiceGeometry.IntersecResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
