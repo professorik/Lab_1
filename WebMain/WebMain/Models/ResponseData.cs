@@ -9,7 +9,7 @@ namespace WebMain.Models
 
         public string Image { get; set; }
 
-        public string Error {  get; set; }
+        public string Error { get; set; }
 
         public XmlElement SvgImage { get; set; }
     }

@@ -6,14 +6,13 @@ namespace WebGraphics.Models
     {
         public GraphicsData()
         {
-            Lines = new List<WebGeometry.Line>();
-            InterPoint = new WebGeometry.Point();
+            Lines = new List<Line>();
+            InterPoint = new Point();
         }
 
-        public List<WebGeometry.Line> Lines { get; set; }
-        public WebGeometry.Point InterPoint { get; set; }
+        public List<Line> Lines { get; set; }
+        public Point InterPoint { get; set; }
         public string Error { get; set; }
-
         public int Width { get; set; }
         public int Height { get; set; }
     }

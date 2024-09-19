@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGeometry", "WebGeometry\WebGeometry.csproj", "{517BDD7E-A296-4E96-9D5F-D20E382CEDF1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGeometry", "WebGeometry\WebGeometry.csproj", "{060590B8-CC9C-4E40-9276-8C4AB77595D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{517BDD7E-A296-4E96-9D5F-D20E382CEDF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{517BDD7E-A296-4E96-9D5F-D20E382CEDF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{517BDD7E-A296-4E96-9D5F-D20E382CEDF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{517BDD7E-A296-4E96-9D5F-D20E382CEDF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{060590B8-CC9C-4E40-9276-8C4AB77595D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{060590B8-CC9C-4E40-9276-8C4AB77595D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{060590B8-CC9C-4E40-9276-8C4AB77595D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{060590B8-CC9C-4E40-9276-8C4AB77595D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {5C4D0972-6ADE-4BB9-A288-D43FDD25D5CB}
+		SolutionGuid = {8E39055D-C933-4975-96EC-33CC9F605ACF}
 	EndGlobalSection
 EndGlobal
