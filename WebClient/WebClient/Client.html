@@ -52,37 +52,36 @@
         X22.value = 53.0;
         Y22.value = 12.2;
 
-        const send_soap = function (w, h, data, svg = false) {
-            let text_xml = '<?xml version=\"1.0\" encoding=\"utf-8\"?>' +
-                '<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">' +
-                '<soap12:Body>' + '<GetData xmlns=\"map\">' + '<client_data>' + '<Data>' + '<Lines>'
-            for (i = 0; i < 2; ++i) {
-                text_xml += '<Line>' +
-                    '<A>' + '<X>' + data[i].A.X + '</X>' + '<Y>' + data[i].A.Y + '</Y>' + '</A>' +
-                    '<B>' + '<X>' + data[i].B.X + '</X>' + '<Y>' + data[i].B.Y + '</Y>' + '</B>' +
-                    '</Line>';
+        const get_body = function (w, h, data, svg = false) {
+            let body = {
+                "Lines": [],
+                "SVG": svg,
+                "W": w,
+                "H": h
             }
-            text_xml += '</Lines>' + '</Data>' + `<W>${w}</W>` + `<H>${h}</H>` + `<SVG>${svg}</SVG>`
-            text_xml += '</client_data>' + '</GetData>' + '</soap12:Body>' + '</soap12:Envelope>'
-            return text_xml;
+            for (i = 0; i < 2; ++i) {
+                body.Lines.push({
+                    "A": {"X": data[i].A.X, "Y": data[i].A.Y},
+                    "B": {"X": data[i].B.X, "Y": data[i].B.Y}
+                });
+            }
+            return JSON.stringify(body);
         }
 
         function getResult(data) {
             var xroot = $(data).children().eq(0);
-            var xbody = xroot.children().eq(0);
-            var xresponse = xbody.children().eq(0);
-            return xresponse.children().eq(0).children();
+            return xroot.children();
         }
 
-        const success = function (data) {
+        const successBitmap = function (data) {
             var xresult = getResult(data);
             A.textContent = xresult.eq(0).text();
             B.textContent = xresult.eq(1).text();
-            im.src = 'data:image/jpeg;base64,' + xresult.eq(2).text();
+            im.src = 'data:image/jpeg;base64,' + xresult.eq(3).text();
             document.getElementById('svg-space').style.display = 'none';
             document.getElementById("im").style.display = 'block';
             document.getElementById("interpoint").style.display = 'block';
-            var errorMsg = xresult.eq(3).text();
+            var errorMsg = xresult.eq(2).text();
             if (errorMsg !== '') {
                 window.alert(errorMsg);
             }
@@ -96,7 +95,7 @@
             document.getElementById('svg-space').style.display = 'block';
             document.getElementById("im").style.display = 'none';
             document.getElementById("interpoint").style.display = 'block';
-            var errorMsg = xresult.eq(3).text();
+            var errorMsg = xresult.eq(2).text();
             if (errorMsg !== '') {
                 window.alert(errorMsg);
             }
@@ -116,14 +115,15 @@
                 return;
             }
             $.ajax({
-                url: 'http://localhost:52511/WebMap.asmx',
-                contentType: 'application/soap+xml; charset=utf-8',
-                data: send_soap(w.value, h.value, [
+                url: 'http://localhost:64405/calculate',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'xml',
+                data: get_body(w.value, h.value, [
                     { A: { X: X11.value, Y: Y11.value }, B: { X: X12.value, Y: Y12.value } },
                     { A: { X: X21.value, Y: Y21.value }, B: { X: X22.value, Y: Y22.value } },
                 ], svg_check.checked),
                 type: "POST",
-                success: svg_check.checked? successSVG: success
+                success: svg_check.checked ? successSVG : successBitmap
             });
         }
     </script>

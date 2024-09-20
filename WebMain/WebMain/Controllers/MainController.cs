@@ -8,7 +8,6 @@ using System.Net.Http;
 using System.Text;
 using System.Web;
 using System.Web.Http;
-using System.Web.Script.Serialization;
 using System.Xml;
 using WebMain.Models;
 
@@ -20,11 +19,9 @@ namespace WebMain.Controllers
         private const string geomUri = "http://localhost:49763/api/";
         private const string graphicsUri = "http://localhost:62547/";
 
-
         [Route("calculate")]
-        [HttpGet]
-        //[HttpPost]
-        public IHttpActionResult GetData([FromUri] RequestData client_data)
+        [HttpPost]
+        public IHttpActionResult GetData([FromBody] RequestData client_data)
         {
             try
             {
@@ -41,7 +38,6 @@ namespace WebMain.Controllers
                 (string, XmlElement) imageResponse = createImage(client_data, response.Item1, response.Item2);
                 result.Image = imageResponse.Item1;
                 result.SvgImage = imageResponse.Item2;
-
                 return Ok(result);
             }
             catch (Exception e) {
@@ -72,7 +68,8 @@ namespace WebMain.Controllers
                 xmlDocument.Load(stream);
                 return (String.Empty, xmlDocument.DocumentElement);
             }
-            return (imageResponse.Content.ReadAsStringAsync().Result, null);
+            string deserializedString = JsonConvert.DeserializeObject<string>(imageResponse.Content.ReadAsStringAsync().Result);
+            return (deserializedString, null);
         }
 
 
@@ -95,14 +92,13 @@ namespace WebMain.Controllers
             string requestUri = string.Format("geometry?{0}", paramStr);
 
             HttpResponseMessage response = client.GetAsync(requestUri).Result;
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             if (response.IsSuccessStatusCode)
             {
-                Point interPoint = json_serializer.Deserialize<Point>(response.Content.ReadAsStringAsync().Result);
+                Point interPoint = JsonConvert.DeserializeObject<Point>(response.Content.ReadAsStringAsync().Result);
                 return (interPoint, String.Empty);
             }
             string errorMsg = response.StatusCode == HttpStatusCode.BadRequest ? 
-                json_serializer.Deserialize<ErrorMsg>(response.Content.ReadAsStringAsync().Result).Message : "something went wrong";
+                JsonConvert.DeserializeObject<ErrorMsg>(response.Content.ReadAsStringAsync().Result).Message : "something went wrong";
             return (null, errorMsg);
         }
     }
