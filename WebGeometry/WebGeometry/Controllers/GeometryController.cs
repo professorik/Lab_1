@@ -19,7 +19,7 @@ namespace WebGeometry.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest("Invalid data: " + e.Message);
+                return BadRequest(e.Message);
             }
         }
     }

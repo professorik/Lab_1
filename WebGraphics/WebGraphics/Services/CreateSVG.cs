@@ -1,5 +1,7 @@
-﻿using System.Drawing;
+﻿using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
+using System.Threading;
 using System.Xml;
 using WebGraphics.Models;
 

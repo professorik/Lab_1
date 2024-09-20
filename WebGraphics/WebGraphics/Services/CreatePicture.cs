@@ -50,11 +50,20 @@ namespace WebGraphics.Services
             if (Math.Abs(l.B.Y - l.A.Y) < 1e-5)
                 return (new PointF(_xmin, l.A.Y), new PointF(_xmax, l.B.Y));
             float a = (l.B.Y - l.A.Y) / (l.B.X - l.A.X);
-            float tmp = l.B.Y + a * (_xmax - l.B.X);
-            PointF first = Math.Abs(tmp) <= _ymax ? new PointF(_xmax, tmp) : new PointF(l.B.X + (_ymax - l.B.Y) / a, _ymax);
-            tmp = l.A.Y + a * (_xmin - l.A.X);
-            PointF second = Math.Abs(tmp) <= _ymax ? new PointF(_xmin, tmp) : new PointF(l.A.X + (_ymin - l.A.Y) / a, _ymin);
+            PointF tmp = getY(_xmax, l.B, a);
+            PointF first = Math.Abs(tmp.Y) <= _ymax ? tmp : getX(Math.Sign(a) * _ymax, l.B, a);
+            tmp = getY(_xmin, l.B, a);
+            PointF second = Math.Abs(tmp.Y) <= _ymax ? tmp : getX(Math.Sign(a) * _ymin, l.B, a);
             return (first, second);
+        }
+
+        private PointF getY(float x, Models.Point A, float a)
+        {
+            return new PointF(x, A.Y + a * (x - A.X));
+        }
+        private PointF getX(float y, Models.Point A, float a)
+        {
+            return new PointF(A.X + (y - A.Y) / a, y);
         }
     }
 }

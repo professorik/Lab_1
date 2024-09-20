@@ -1,7 +1,11 @@
-﻿using System.Web.Http;
+﻿using System.Net.Http;
+using System.Net;
+using System.Text;
+using System.Web.Http;
 using System.Xml;
 using WebGraphics.Models;
 using WebGraphics.Services;
+using System.Web.UI.WebControls;
 
 namespace WebGraphics.Controllers
 {
@@ -17,9 +21,10 @@ namespace WebGraphics.Controllers
 
         [Route("svg")]
         [HttpPost]
-        public XmlElement GetSVG([FromBody] GraphicsData data)
+        public IHttpActionResult GetSVG([FromBody] GraphicsData data)
         {
-            return new CreateSVG(data).MakePicture();
+            XmlElement element = new CreateSVG(data).MakePicture();
+            return Content(HttpStatusCode.OK, element, Configuration.Formatters.XmlFormatter);
         }
     }
 }
