@@ -141,6 +141,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Handlers\GraphicServiceHandler.cs" />
     <Compile Include="Models\ErrorMsg.cs" />
     <Compile Include="Models\GraphicsData.cs" />
     <Compile Include="Models\Line.cs" />
@@ -148,6 +149,7 @@
     <Compile Include="Models\RequestData.cs" />
     <Compile Include="Models\ResponseData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Handlers\GeometryServiceHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="libman.json" />
